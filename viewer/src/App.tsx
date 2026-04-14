@@ -23,7 +23,7 @@ export default function App() {
   }, [dark]);
 
   useEffect(() => {
-    fetch('/config.json')
+    fetch('config.json')
       .then(r => { if (!r.ok) throw new Error(`config.json not found (${r.status})`); return r.json(); })
       .then(setConfig)
       .catch(e => setError(e.message));
