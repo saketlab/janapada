@@ -1,0 +1,21 @@
+{
+  "name": "janapada",
+  "version": "0.1.0",
+  "description": "Visualize how administrative boundaries split, merge, and rename over time — for any country.",
+  "type": "commonjs",
+  "bin": {
+    "janapada": "./cli/process.cjs"
+  },
+  "scripts": {
+    "process": "node cli/process.cjs",
+    "setup:viewer": "node scripts/setup-viewer.cjs",
+    "dev": "node scripts/setup-viewer.cjs && cd viewer && npm run dev",
+    "build": "node scripts/setup-viewer.cjs && cd viewer && npm run build"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {},
+  "keywords": ["maps", "geojson", "administrative-boundaries", "choropleth", "history", "india", "districts"],
+  "license": "MIT"
+}

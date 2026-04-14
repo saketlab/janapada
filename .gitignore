@@ -1,0 +1,11 @@
+node_modules/
+viewer/node_modules/
+
+viewer/public/evolution.json
+viewer/public/config.json
+viewer/public/*.geojson
+
+viewer/dist/
+
+.env
+.env.local

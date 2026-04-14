@@ -1,0 +1,107 @@
+name: "India Districts 1951–2024"
+
+# Column-name prefix for level-1 and level-2 admin units in the CSV.
+# CSV headers must follow the pattern:  {year}-{level1}  and  {year}-{level2}
+# e.g. "1951-state" and "1951-district"
+levels:
+  level1: state       # province, region, county, etc.
+  level2: district    # municipality, county, taluka, etc.
+
+years: [1951, 1961, 1971, 1981, 1991, 2001, 2011, 2024]
+
+# The earliest year is always the "origin" — chains are traced forward from it.
+# Override here if your data starts at a different year.
+# origin_year: 1951
+
+# Path to the wide-format transition CSV (relative to this config file).
+transitions: ./data/transitions.csv
+
+# One entry per year. If multiple years share the same boundary file,
+# list the same geojson path — it will be loaded only once.
+sources:
+  - year: 1951
+    geojson: ./data/boundaries/India-1951-districts.geojson
+    key: district_name       # GeoJSON feature property to match against level-2 values
+    parent_key: state_name   # optional: GeoJSON property to match against level-1 values
+
+  - year: 1961
+    geojson: ./data/boundaries/India-1961-districts.geojson
+    key: district_name
+    parent_key: state_name
+
+  - year: 1971
+    geojson: ./data/boundaries/India-1971-districts.geojson
+    key: district_name
+    parent_key: state_name
+
+  - year: 1981
+    geojson: ./data/boundaries/India-1981-districts.geojson
+    key: district_name
+    parent_key: state_name
+
+  - year: 1991
+    geojson: ./data/boundaries/India-1991-districts.geojson
+    key: district_name
+    parent_key: state_name
+
+  - year: 2001
+    geojson: ./data/boundaries/India-2001-districts.geojson
+    key: district_name
+    parent_key: state_name
+
+  - year: 2011
+    geojson: ./data/boundaries/India-2011-districts.geojson
+    key: district_name
+    parent_key: state_name
+
+  # 2024 reuses the 2011 boundary file
+  - year: 2024
+    geojson: ./data/boundaries/India-2011-districts.geojson
+    key: district_name
+    parent_key: state_name
+
+# Fuzzy matching: set to true to tolerate spelling variations between
+# CSV names and GeoJSON feature names. Set to false to require exact matches.
+fuzzy_match: true
+
+# Optional: rename level-1 values before matching.
+# Useful when the CSV uses older spellings that differ from GeoJSON names.
+level1_aliases:
+  "arunanchal pradesh": "arunachal pradesh"
+  "nct of delhi": "delhi"
+  "odisha": "orissa"
+  "puducherry": "pondicherry"
+
+# Optional: correct level-2 values for specific years before GeoJSON matching.
+# Structure: { year: { "csv name (lowercased)": "GeoJSON name" } }
+level2_corrections:
+  2011:
+    "kasargod": "Kasaragod"
+    "north twenty four parganas": "North 24 Parganas"
+    "south twenty four parganas": "South 24 Parganas"
+
+# Output path for the processed evolution JSON (relative to this config file).
+output: ./evolution.json
+
+# Color palette for chains (cycles if more chains than colors).
+palette:
+  - "#e63946"
+  - "#f4a261"
+  - "#2a9d8f"
+  - "#457b9d"
+  - "#a8dadc"
+  - "#6a4c93"
+  - "#f72585"
+  - "#4cc9f0"
+  - "#80b918"
+  - "#ffb703"
+  - "#06d6a0"
+  - "#118ab2"
+  - "#ef476f"
+  - "#ffd166"
+  - "#3a86ff"
+  - "#8338ec"
+  - "#fb5607"
+  - "#ff006e"
+  - "#3d405b"
+  - "#81b29a"

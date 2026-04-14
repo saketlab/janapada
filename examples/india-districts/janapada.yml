@@ -1,0 +1,87 @@
+name: "India Districts 1951–2024"
+
+levels:
+  level1: state
+  level2: district
+
+years: [1951, 1961, 1971, 1981, 1991, 2001, 2011, 2024]
+
+transitions: ./data/district_evolution_1951_2024.csv
+
+# GeoJSON files are resolved relative to this config file.
+# The paths below point into a bharatviz checkout at ../../public/.
+# If you have the files elsewhere, update these paths accordingly.
+
+sources:
+  - year: 1951
+    geojson: ./data/India-1951-districts.geojson
+    key: district_name
+    parent_key: state_name
+  - year: 1961
+    geojson: ./data/India-1961-districts.geojson
+    key: district_name
+    parent_key: state_name
+  - year: 1971
+    geojson: ./data/India-1971-districts.geojson
+    key: district_name
+    parent_key: state_name
+  - year: 1981
+    geojson: ./data/India-1981-districts.geojson
+    key: district_name
+    parent_key: state_name
+  - year: 1991
+    geojson: ./data/India-1991-districts.geojson
+    key: district_name
+    parent_key: state_name
+  - year: 2001
+    geojson: ./data/India-2001-districts.geojson
+    key: district_name
+    parent_key: state_name
+  - year: 2011
+    geojson: ./data/India-2011-districts.geojson
+    key: district_name
+    parent_key: state_name
+  - year: 2024
+    geojson: ./data/India-2011-districts.geojson
+    key: district_name
+    parent_key: state_name
+
+fuzzy_match: true
+
+level1_aliases:
+  "arunanchal pradesh": "arunachal pradesh"
+  "andaman and nicobar island": "andaman and nicobar islands"
+  "dadara and nagar havelli": "dadra and nagar haveli"
+  "puducherry": "pondicherry"
+  "odisha": "orissa"
+  "nct of delhi": "delhi"
+
+level2_corrections:
+  1991:
+    "kasargod": "Kasaragod"
+  2001:
+    "dhuburi": "Dhubri"
+    "kasargod": "Kasaragod"
+    "tiruchchirappalli": "Tiruchirappalli"
+  2011:
+    "morigaon": "Marigaon"
+    "chamarajanagar": "Chamrajnagar"
+    "kasargod": "Kasaragod"
+    "khargone (west nimar)": "West Nimar"
+    "khandwa (east nimar)": "East Nimar"
+    "annupur": "Anuppur"
+    "gadchiroli": "Garhchiroli"
+    "lawngtlai": "Lawangtlai"
+    "nagapattinam": "Nagappattinam"
+    "tiruchchirappalli": "Tiruchirappalli"
+    "virudhunagar": "Virudunagar"
+    "kanshiram nagar": "Kansiram Nagar"
+    "mahrajganj": "Maharajganj"
+    "sant ravidas nagar (bhadohi)": "Sant Ravi Das Nagar(bhadohi)"
+    "siddharthnagar": "Siddharth Nagar"
+    "paschim medinipur": "Pashchim Medinipur"
+    "north twenty four parganas": "North 24 Parganas"
+    "south twenty four parganas": "South 24 Parganas"
+    "saran": "Saran (chhapra)"
+
+output: ./evolution.json
