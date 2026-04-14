@@ -10,7 +10,8 @@
     "process": "node cli/process.cjs",
     "setup:viewer": "node scripts/setup-viewer.cjs",
     "dev": "node scripts/setup-viewer.cjs && cd viewer && npm run dev",
-    "build": "node scripts/setup-viewer.cjs && cd viewer && npm run build"
+    "build": "node scripts/setup-viewer.cjs && cd viewer && npm run build",
+    "build:lib": "cd viewer && npm run build:lib"
   },
   "dependencies": {
     "js-yaml": "^4.1.0"

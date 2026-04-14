@@ -44,9 +44,21 @@ jobs:
         env:
           VITE_BASE_URL: /janapada/
 
+      - name: Build embeddable library
+        run: npm run build:lib
+        working-directory: viewer
+
+      - name: Assemble Pages directory
+        run: |
+          mkdir -p _site
+          cp -r viewer/dist/. _site/
+          mkdir -p _site/lib
+          cp viewer/dist-lib/janapada.iife.js _site/lib/janapada.iife.js
+          cp demo.html _site/demo.html
+
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: viewer/dist
+          path: _site
 
   deploy:
     needs: build

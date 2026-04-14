@@ -6,6 +6,7 @@ viewer/public/config.json
 viewer/public/*.geojson
 
 viewer/dist/
+viewer/dist-lib/
 
 .env
 .env.local

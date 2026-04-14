@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Janapada — embed tutorial</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #faf7f2;
+      --bg-card:   #ffffff;
+      --border:    #e5ddd0;
+      --saffron:   #c07830;
+      --text:      #1a1309;
+      --muted:     #7a6a50;
+      --code-bg:   #f3ede3;
+      --code-text: #5a3a10;
+      --step-num:  #e8d9c0;
+      --radius:    10px;
+      --mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+.page-header {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .page-header svg { flex-shrink: 0; }
+    .page-header h1  { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; }
+    .page-header p   { font-size: 0.8rem; color: var(--muted); }
+    .page-header .spacer { flex: 1; }
+    .view-toggle {
+      display: flex;
+      gap: 6px;
+    }
+    .view-toggle button {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .view-toggle button.active,
+    .view-toggle button:hover {
+      background: var(--saffron);
+      color: #fff;
+      border-color: var(--saffron);
+    }
+
+.layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      min-height: calc(100vh - 61px);
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+
+.sidebar {
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 28px 24px 48px;
+      background: var(--bg-card);
+    }
+    .sidebar h2 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--saffron);
+      margin-bottom: 20px;
+    }
+
+.step {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--step-num);
+      color: var(--saffron);
+      font-size: 0.72rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-body h3 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .step-body p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .step-body p + p { margin-top: -4px; }
+
+pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 11px 13px;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--code-text);
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.55;
+      margin-bottom: 6px;
+    }
+    code {
+      font-family: var(--mono);
+      font-size: 0.78em;
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+    .comment { color: #9a7a50; }
+    .kw      { color: #8b3a0f; font-weight: 600; }
+    .str     { color: #3a7a3a; }
+    .fn      { color: #1a4a9a; }
+
+.file-tree {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 10px 13px;
+      font-family: var(--mono);
+      font-size: 0.69rem;
+      color: var(--code-text);
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+    .file-tree .dir  { color: var(--saffron); font-weight: 600; }
+    .file-tree .hi   { color: #1a4a9a; font-weight: 600; }
+
+.divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 22px 0;
+    }
+
+.map-panel {
+      display: flex;
+      flex-direction: column;
+      min-height: 500px;
+    }
+    #map-india    { flex: 1; }
+    #map-district { flex: 1; display: none; }
+
+.note {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      background: #fdf3e3;
+      border: 1px solid #f0d9a8;
+      border-radius: 7px;
+      padding: 9px 12px;
+      font-size: 0.74rem;
+      color: #7a5010;
+      margin-bottom: 8px;
+    }
+    .note svg { flex-shrink: 0; margin-top: 1px; }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+    fill="none" stroke="#c07830" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+    <path d="M2 12h20"/>
+  </svg>
+  <h1>Janapada</h1>
+  <p>embed tutorial</p>
+  <div class="spacer"></div>
+  <div class="view-toggle">
+    <button class="active" onclick="showView('india')">All India</button>
+    <button onclick="showView('district')">By district</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <h2>How to embed</h2>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>Prepare your data files</h3>
+        <p>An <strong>evolution.json</strong> (generated in step 3) and one <strong>GeoJSON file per census year</strong>, served alongside your HTML.</p>
+        <div class="file-tree">
+<span class="dir">my-project/</span>
+├── <span class="hi">evolution.json</span>      ← generated below
+├── <span class="hi">boundaries-1951.geojson</span>
+├── <span class="hi">boundaries-1961.geojson</span>
+└── index.html
+        </div>
+        <p>Each GeoJSON needs a property for the unit name (e.g. <code>district_name</code>) and optionally a parent (e.g. <code>state_name</code>).</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>Write a transitions CSV</h3>
+        <p>One row per lineage. Columns are <code>{year}-{level1}</code> / <code>{year}-{level2}</code> pairs. Empty cells mean the unit did not exist that year. Splits have multiple rows from one source; merges have multiple rows to one destination.</p>
+        <pre><span class="comment"># transitions.csv</span>
+1951-state,1951-district,1961-state,1961-district
+Bihar,Hazaribagh,Bihar,Hazaribagh
+Bihar,Hazaribagh,Bihar,Hazaribagh
+Bihar,Hazaribagh,Jharkhand,Chatra
+Bihar,Hazaribagh,Jharkhand,Koderma</pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>Generate evolution.json</h3>
+        <p><strong>Option A — Node.js</strong> (recommended)</p>
+        <pre><span class="comment"># install once</span>
+npm install -g janapada
+
+<span class="comment"># run</span>
+janapada janapada.yml</pre>
+
+        <hr class="divider" />
+
+        <p><strong>Option B — R</strong></p>
+        <pre><span class="kw">install.packages</span>(<span class="fn">c</span>(<span class="str">"yaml"</span>, <span class="str">"jsonlite"</span>))
+<span class="fn">source</span>(<span class="str">"make_evolution.R"</span>)</pre>
+        <p><code>make_evolution.R</code> produces identical output to the Node CLI, including fuzzy GeoJSON matching and BFS chain coloring.</p>
+
+        <hr class="divider" />
+
+        <p><strong>Config file (janapada.yml)</strong></p>
+        <pre><span class="kw">name</span>: <span class="str">"India Districts"</span>
+<span class="kw">levels</span>:
+  <span class="kw">level1</span>: <span class="str">state</span>
+  <span class="kw">level2</span>: <span class="str">district</span>
+<span class="kw">years</span>: [1951, 1961, 1971, 1981]
+<span class="kw">transitions</span>: <span class="str">./transitions.csv</span>
+<span class="kw">sources</span>:
+  - <span class="kw">year</span>: 1951
+    <span class="kw">geojson</span>: <span class="str">./boundaries-1951.geojson</span>
+    <span class="kw">key</span>: <span class="str">district_name</span>
+    <span class="kw">parent_key</span>: <span class="str">state_name</span>
+<span class="kw">fuzzy_match</span>: <span class="str">true</span>
+<span class="kw">output</span>: <span class="str">./evolution.json</span></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h3>Add the script tag</h3>
+        <pre><span class="kw">&lt;script</span> <span class="fn">src</span>=<span class="str">"https://saketlab.github.io/janapada/lib/janapada.iife.js"</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
+        <p>React, D3, and styles are all bundled in. No build tooling needed.</p>
+        <div class="note">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          ~700 KB uncompressed, ~212 KB gzipped.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h3>Call <code>Janapada.init()</code></h3>
+        <p><strong>All-years grid view</strong></p>
+        <pre><span class="fn">Janapada.init</span>(<span class="str">'#map'</span>, {
+  <span class="kw">evolutionFile</span>: <span class="str">'evolution.json'</span>,
+  <span class="kw">geojsonSources</span>: [
+    { <span class="kw">year</span>: 1951,
+      <span class="kw">url</span>: <span class="str">'boundaries-1951.geojson'</span>,
+      <span class="kw">key</span>: <span class="str">'district_name'</span>,
+      <span class="kw">parentKey</span>: <span class="str">'state_name'</span> },
+    <span class="comment">// ... one entry per year</span>
+  ],
+});</pre>
+
+        <p><strong>Open on the district tab</strong></p>
+        <pre><span class="fn">Janapada.init</span>(<span class="str">'#map'</span>, {
+  <span class="kw">evolutionFile</span>: <span class="str">'evolution.json'</span>,
+  <span class="kw">geojsonSources</span>: [ <span class="comment">/* ... */</span> ],
+  <span class="kw">initialMode</span>:    <span class="str">'district'</span>,
+  <span class="kw">defaultDistrict</span>: <span class="str">'Hazaribagh'</span>,
+});</pre>
+
+        <p><strong>Unmount</strong></p>
+        <pre><span class="fn">Janapada.destroy</span>(<span class="str">'#map'</span>);</pre>
+
+        <hr class="divider" />
+
+        <p><strong>All options</strong></p>
+        <pre><span class="comment">evolutionFile</span>    string   <span class="comment">required</span>
+<span class="comment">geojsonSources</span>   array    <span class="comment">required</span>
+<span class="comment">darkMode</span>         boolean  false
+<span class="comment">initialMode</span>      string   <span class="str">'grid'</span> | <span class="str">'single'</span> | <span class="str">'district'</span>
+<span class="comment">defaultDistrict</span>  string   pre-loaded district name
+<span class="comment">noOriginLabel</span>    string   legend label for untraced units</pre>
+      </div>
+    </div>
+
+  </aside>
+
+  <main class="map-panel">
+    <div id="map-india"></div>
+    <div id="map-district"></div>
+  </main>
+
+</div>
+
+<script>
+  var onPages  = location.hostname === 'saketlab.github.io';
+  var GEO_BASE = onPages ? 'https://saketlab.github.io/janapada/' : 'examples/india-districts/data/';
+  var EVO      = onPages ? 'https://saketlab.github.io/janapada/evolution.json'
+                         : 'examples/india-districts/evolution.json';
+
+  var SOURCES = [
+    { year: 1951, url: GEO_BASE + 'India-1951-districts.geojson', key: 'district_name', parentKey: 'state_name' },
+    { year: 1961, url: GEO_BASE + 'India-1961-districts.geojson', key: 'district_name', parentKey: 'state_name' },
+    { year: 1971, url: GEO_BASE + 'India-1971-districts.geojson', key: 'district_name', parentKey: 'state_name' },
+    { year: 1981, url: GEO_BASE + 'India-1981-districts.geojson', key: 'district_name', parentKey: 'state_name' },
+    { year: 1991, url: GEO_BASE + 'India-1991-districts.geojson', key: 'district_name', parentKey: 'state_name' },
+    { year: 2001, url: GEO_BASE + 'India-2001-districts.geojson', key: 'district_name', parentKey: 'state_name' },
+    { year: 2011, url: GEO_BASE + 'India-2011-districts.geojson', key: 'district_name', parentKey: 'state_name' },
+    { year: 2024, url: GEO_BASE + 'India-2011-districts.geojson', key: 'district_name', parentKey: 'state_name' },
+  ];
+
+  function mount() {
+    Janapada.init('#map-india', {
+      evolutionFile:  EVO,
+      geojsonSources: SOURCES,
+      initialMode:    'grid',
+    });
+    Janapada.init('#map-district', {
+      evolutionFile:   EVO,
+      geojsonSources:  SOURCES,
+      initialMode:     'district',
+      defaultDistrict: 'Hazaribagh',
+    });
+  }
+
+  var bundleSrc = onPages ? 'lib/janapada.iife.js' : 'viewer/dist-lib/janapada.iife.js';
+  var s = document.createElement('script');
+  s.src = bundleSrc;
+  s.onload = mount;
+  document.head.appendChild(s);
+
+  function showView(which) {
+    var indiaEl    = document.getElementById('map-india');
+    var districtEl = document.getElementById('map-district');
+    var btns       = document.querySelectorAll('.view-toggle button');
+    if (which === 'india') {
+      indiaEl.style.display    = '';
+      districtEl.style.display = 'none';
+      btns[0].classList.add('active');
+      btns[1].classList.remove('active');
+    } else {
+      indiaEl.style.display    = 'none';
+      districtEl.style.display = '';
+      btns[0].classList.remove('active');
+      btns[1].classList.add('active');
+    }
+  }
+</script>
+
+</body>
+</html>

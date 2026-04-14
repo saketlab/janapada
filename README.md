@@ -1,9 +1,6 @@
 # janapada
 
-
 Track how administrative boundaries split, merge, and rename over time. Each unit's lineage is color-coded forward from its earliest known boundary.
-
-
 
 ## How it works
 
@@ -11,7 +8,6 @@ Track how administrative boundaries split, merge, and rename over time. Each uni
 2. Provide **GeoJSON boundary files**: one per year, or shared across years.
 3. Run `janapada process` with a `janapada.yml` config. It matches the CSV to the GeoJSON features and writes `evolution.json`.
 4. Drop `EvolutionMap.tsx` into a React app and pass it `evolution.json` and the GeoJSON URLs.
-
 
 ## Requirements
 
@@ -34,7 +30,6 @@ npm run dev
 
 `npm run dev` copies the processed data into `viewer/public/` and starts the Vite dev server.
 
-
 ## Using your own dataset
 
 1. Copy the example config:
@@ -47,7 +42,6 @@ npm run dev
    node cli/process.cjs mydata/janapada.yml
    npm run dev -- mydata/janapada.yml
    ```
-
 
 ## Transition CSV format
 
@@ -65,7 +59,6 @@ The two rows above both originate from Srikakulam in 1951. By 2024 it split: one
 - Splits: one source row, multiple destination rows sharing that source.
 - Merges: multiple source rows converging to the same destination.
 - Level names (`state`, `district`) are set in the config and can be anything.
-
 
 ## Config reference (`janapada.yml`)
 
@@ -105,7 +98,6 @@ palette:
   - "#f4a261"
 ```
 
-
 ## Viewer
 
 ```tsx
@@ -122,22 +114,21 @@ import { EvolutionMap } from './EvolutionMap';
 />
 ```
 
-The component fetches `evolution.json` and GeoJSON at runtime. Serve them from `public/` or any static host.
+Fetch `evolution.json` and GeoJSON at runtime. Serve them from `public/` or any static host.
 
 ### Props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `evolutionFile` | `string` | URL to `evolution.json` |
-| `geojsonSources` | `GeoJSONSource[]` | `{ year, url, key, parentKey?, parentFilter? }` per year |
-| `darkMode` | `boolean` | Default `false` |
-| `noOriginLabel` | `string` | Legend label for units with no origin-year ancestor |
-| `defaultDistrict` | `string` | Pre-loaded district in the "By district" view |
-
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `evolutionFile` | `string` | | URL to `evolution.json` |
+| `geojsonSources` | `GeoJSONSource[]` | | `{ year, url, key, parentKey?, parentFilter? }` per year |
+| `darkMode` | `boolean` | `false` | |
+| `initialMode` | `string` | `'grid'` | Opening tab: `'grid'`, `'single'`, or `'district'` |
+| `defaultDistrict` | `string` | | Pre-loaded district in the "By district" tab |
+| `noOriginLabel` | `string` | | Legend label for units with no origin-year ancestor |
 
 ## License
 
 MIT
 
-
-> *Sanskrit: जनपद, "foothold of a clan"*
+> जनपद (Sanskrit janpada), "foothold of a clan"

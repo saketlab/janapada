@@ -55,6 +55,8 @@ export interface EvolutionMapProps {
   noOriginLabel?: string;
   /** Default district name pre-loaded in the district focus view */
   defaultDistrict?: string;
+  /** Which tab to show on first render: 'grid' (default), 'single', or 'district' */
+  initialMode?: 'grid' | 'single' | 'district';
 }
 
 interface PanelState {
@@ -303,8 +305,8 @@ function SegBtn({ label, active, darkMode, onClick }: { label: string; active: b
   );
 }
 
-export function EvolutionMap({ evolutionFile, geojsonSources, darkMode = false, noOriginLabel, defaultDistrict }: EvolutionMapProps) {
-  const [mode, setMode]                     = useState<'single' | 'grid' | 'district'>('grid');
+export function EvolutionMap({ evolutionFile, geojsonSources, darkMode = false, noOriginLabel, defaultDistrict, initialMode = 'grid' }: EvolutionMapProps) {
+  const [mode, setMode]                     = useState<'single' | 'grid' | 'district'>(initialMode);
   const [yearIdx, setYearIdx]               = useState(0);
   const [allFCs, setAllFCs]                 = useState<Map<number, any>>(new Map());
   const [evoData, setEvoData]               = useState<EvolutionData | null>(null);
