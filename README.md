@@ -3,9 +3,7 @@
 
 Track how administrative boundaries split, merge, and rename over time. Each unit's lineage is color-coded forward from its earliest known boundary.
 
-Ships with India's district evolution (1951–2024) as the default example.
 
----
 
 ## How it works
 
@@ -14,7 +12,6 @@ Ships with India's district evolution (1951–2024) as the default example.
 3. Run `janapada process` with a `janapada.yml` config. It matches the CSV to the GeoJSON features and writes `evolution.json`.
 4. Drop `EvolutionMap.tsx` into a React app and pass it `evolution.json` and the GeoJSON URLs.
 
----
 
 ## Requirements
 
@@ -37,7 +34,6 @@ npm run dev
 
 `npm run dev` copies the processed data into `viewer/public/` and starts the Vite dev server.
 
----
 
 ## Using your own dataset
 
@@ -52,7 +48,6 @@ npm run dev
    npm run dev -- mydata/janapada.yml
    ```
 
----
 
 ## Transition CSV format
 
@@ -71,7 +66,6 @@ The two rows above both originate from Srikakulam in 1951. By 2024 it split: one
 - Merges: multiple source rows converging to the same destination.
 - Level names (`state`, `district`) are set in the config and can be anything.
 
----
 
 ## Config reference (`janapada.yml`)
 
@@ -111,7 +105,6 @@ palette:
   - "#f4a261"
 ```
 
----
 
 ## Viewer
 
@@ -141,7 +134,6 @@ The component fetches `evolution.json` and GeoJSON at runtime. Serve them from `
 | `noOriginLabel` | `string` | Legend label for units with no origin-year ancestor |
 | `defaultDistrict` | `string` | Pre-loaded district in the "By district" view |
 
----
 
 ## License
 
